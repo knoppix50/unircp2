@@ -1,0 +1,11 @@
+# Desactiva SELinux permanentemente.
+- name: disable SELinux
+  become: yes
+  command: setenforce 0
+  ignore_errors: yes
+
+- name: disable SELinux on reboot
+  become: yes
+  selinux:
+     state: disabled
+

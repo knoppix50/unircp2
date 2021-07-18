@@ -1,0 +1,22 @@
+### -- PRIMERA PARTE -- ###
+### -- build0.yaml -- ###
+# Tareas previas comunes en todos los nodos.
+- name: common tasks
+  hosts: all
+  gather_facts: true
+  roles:
+    - role: previous_tasks
+    - role: synchronization
+
+# Networking 
+- name: set networking
+  hosts: cluster
+  gather_facts: true
+  roles:
+    - role: networking
+
+# Reboot VMs (first reboot)
+- name: Reboot VMs
+  hosts: cluster
+  roles:
+    - role: reboot_vm

@@ -1,0 +1,6 @@
+---
+- name: enable modprobe br_netfilter
+  become: yes
+  shell: |
+     modprobe br_netfilter
+

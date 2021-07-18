@@ -1,0 +1,175 @@
+---
+### -- PRIMERA PARTE -- ###
+### -- build0.yaml -- ###
+# Tareas previas comunes en todos los nodos.
+- name: common tasks
+  hosts: all
+  gather_facts: true
+  roles:
+    - role: previous_tasks
+    - role: synchronization
+
+# Networking 
+- name: set networking
+  hosts: cluster
+  gather_facts: true
+  roles:
+    - role: networking
+
+# Reboot VMs (first reboot)
+- name: Reboot VMs
+  hosts: cluster
+  roles:
+    - role: reboot_vm
+
+### -- build1.yaml -- ###
+# Instalación y config del NFS para el cluster K8S.
+- name: NFS install packages
+  hosts: all
+  gather_facts: false
+  roles:
+    - role: nfs_ansible
+      action: install_pkg
+
+- name: NFS server setup
+  hosts: nfs
+  gather_facts: false
+  roles:
+    - role: nfs_ansible
+      action: nfs-server
+
+- name: NFS firewall rules
+  hosts: nfs
+  gather_facts: true
+  roles:
+    - role: nfs_ansible
+      action: nfs_firewall
+
+# Restart firewalld
+- name: reload service firewalld
+  hosts: nfs
+  roles:
+    - role: firewall_restart
+
+### -- build2.yaml -- ###
+# # Firewall
+# - name: disable firewalld
+#   hosts: cluster
+#   roles:
+#     - role: firewall_off
+  
+# Firewall
+- name: set rules fw on masters
+  hosts: masters
+  vars_files:
+    - "group_vars/cluster_parameters.yaml"
+  gather_facts: true
+  roles:
+    - role: firewall
+      action: fw_masters
+
+- name: set rules fw on workers
+  hosts: workers
+  vars_files:
+    - "group_vars/cluster_parameters.yaml"
+  gather_facts: true
+  roles:
+    - role: firewall
+      action: fw_workers
+
+# Restart firewalld
+- name: reload service firewalld
+  hosts: cluster
+  roles:
+    - role: firewall_restart
+
+
+### -- build3.yaml -- ###
+# Instalación de Docker.
+- name: Docker installation
+  hosts: all
+  vars_files:
+    - "group_vars/docker.yaml"
+  gather_facts: true
+  roles:
+    - role: docker
+
+### -- build4.yaml -- ###
+# K8S cluster install package 
+- name: K8S cluster install package
+  hosts: cluster
+  gather_facts: true
+  roles:
+    - role: k8s_install
+      action: commons
+
+# K8S master install package 
+- name: K8S cluster install package
+  hosts: masters
+  gather_facts: true
+  roles:
+    - role: k8s_install
+      action: kubectl_masters
+
+# Reboot VMs (second reboot)
+- name: Reboot VMs
+  hosts: cluster
+  roles:
+    - role: reboot_vm
+
+### -- build5.yaml -- ###
+### -- SEGUNDA PARTE -- ###
+
+# K8S init cluster, pod networks, sdn, get token and joining nodes.
+- name: K8S init cluster
+  hosts: masters
+  vars_files:
+    - "group_vars/cluster_parameters.yaml"
+  roles:
+    - { role: k8s_init_cluster/init_kubecluster }
+    - { role: k8s_init_cluster/sdn_install }
+    - { role: k8s_init_cluster/get_token }
+
+- name: K8S init cluster
+  hosts: workers
+  vars_files:
+    - "group_vars/cluster_parameters.yaml"
+  roles:
+    - { role: k8s_init_cluster/join_to_cluster }
+
+### -- build66.yaml -- ###
+# k8S deploy ingress controller (HAPROXY)
+- name: Install ingress controller
+  hosts: masters
+  roles:
+    - { role: ingress_ctrl/install }
+
+- name: Post-install ingress controller
+  hosts: cluster
+  roles:
+    - { role: ingress_ctrl/post_install }
+
+# Restart firewalld
+- name: reload service firewalld
+  hosts: cluster
+  roles:
+    - role: firewall_restart
+
+### -- build7.yaml -- ###
+# K8S Create user account admin for Kubernetes.
+- name: Create and setup kube admin user.
+  hosts: masters
+  vars_files: 
+    - "group_vars/list_users.yaml"
+  roles:
+    - { role: kubeadmin_user/create_user }
+    - { role: kubeadmin_user/config_user }
+
+# Reboot VMs (optional)
+- name: Reboot VMs
+  hosts: cluster
+  roles:
+    - role: reboot_vm
+
+
+### --------------------------###

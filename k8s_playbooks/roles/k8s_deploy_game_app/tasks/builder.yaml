@@ -1,0 +1,5 @@
+- name: create namespace
+  shell: kubectl create namespace minigame
+
+- name: deploy game
+  shell: kubectl apply -f https://raw.githubusercontent.com/knoppix50/mini-apps/main/docker-2048/k8s_deploy/game.yaml

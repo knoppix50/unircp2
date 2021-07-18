@@ -1,0 +1,5 @@
+---
+# tasks file for roles/networking
+- include: '{{action}}.yaml'
+  when:
+  - (action in ["fw_masters", "fw_workers"])

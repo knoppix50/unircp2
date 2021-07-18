@@ -1,0 +1,6 @@
+---
+- name: reboot ALL machines
+  become: yes
+  reboot:
+    post_reboot_delay: 120
+

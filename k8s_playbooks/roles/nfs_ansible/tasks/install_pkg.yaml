@@ -1,0 +1,8 @@
+---
+- name: Instalacion de paquetes
+  dnf:
+     name: ['nfs-utils', 'net-tools', 'nfs4-acl-tools', 'git', 'wget']
+     state: present
+     update_cache: True
+  become: yes
+ 

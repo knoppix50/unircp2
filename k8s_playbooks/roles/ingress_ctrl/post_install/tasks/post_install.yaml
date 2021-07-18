@@ -1,0 +1,10 @@
+- name: Add rule on firewalld 1
+  firewalld:
+    zone: trusted
+    interface: cni0
+    permanent: true
+    immediate: yes
+    state: enabled
+
+
+  

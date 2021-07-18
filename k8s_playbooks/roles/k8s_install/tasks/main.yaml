@@ -1,0 +1,5 @@
+---
+# tasks file for roles/k8s_install
+- include: '{{action}}.yaml'
+  when:
+  - (action in ["commons", "kubectl_masters"])

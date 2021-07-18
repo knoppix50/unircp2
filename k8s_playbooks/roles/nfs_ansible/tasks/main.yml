@@ -1,0 +1,13 @@
+---
+# tasks file for roles/my_nfs
+- include: '{{action}}.yaml'
+  when:
+  - (action in ["install_pkg", "nfs-server", "nfs_firewall"])
+
+# Esta es Una forma de aplicar el mismo rol para diferentes eventos dependiendo
+# del entorno donde se aplica el rol.
+# La action "install_pkg" es el nombre de la task install_pkg.yaml . Y esto, en 
+# el playbook site (playbook ejecutor) se ha configurado para que afecte a todos 
+# los hosts del cluster.
+# Las actions: nfs-server y nfs_firewall se configura para que solo se desplegue
+# en el NFS server.

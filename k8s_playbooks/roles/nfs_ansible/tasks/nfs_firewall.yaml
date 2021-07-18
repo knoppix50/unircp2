@@ -1,0 +1,12 @@
+---
+- name: FirewallD rules for NFS Server
+  firewalld:
+    permanent: yes
+    immediate: yes
+    service: "{{ item }}"
+    state: enabled
+  with_items:
+    - nfs
+    - rpc-bind
+    - mountd
+  become: yes

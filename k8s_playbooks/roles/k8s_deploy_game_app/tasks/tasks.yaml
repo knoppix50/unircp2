@@ -1,0 +1,4 @@
+---
+# tasks file for roles/k8s_init_cluster
+- include_tasks: builder.yaml
+- include_tasks: message.yaml

@@ -1,0 +1,14 @@
+# esto se ejecuta en el node worker que se va a unir al cluster.
+- name: join cluster
+  shell: "{{ hostvars[item].join_command }} --ignore-preflight-errors all  >> node_joined.txt"
+  # shell: "{{ hostvars['slave0.devops.lab'].join_command }} --ignore-preflight-errors all  >> node_joined.txt"
+  # utilizo items (definidos en diccionario 'cluster_parameters.yaml' para no hardcodear el hostname del master en el role. 
+  # hostvars son las denominadas variables mágicas de Ansible. Entiendo que es un gran diccionario donde
+  # guarda mucha información del host donde se ejecuta.Información disponible en runtime.
+  # En este caso concreto, Ansible esta accediendo a las variables del diccionario hostvars del master y le
+  # solicita el valor de la variable 'join_command' definida en la task get_token.yaml
+  args:
+    chdir: $HOME
+    creates: node_joined.txt # en el /root/ del worker se guarda fichero de la salida del shell
+  with_items:
+     - "{{ nodes.master.hostname }}" # busca en el group_vars clsuter_parameters.yaml

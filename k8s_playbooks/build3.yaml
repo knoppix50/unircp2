@@ -1,0 +1,9 @@
+### -- build3.yaml -- ###
+# Instalación de Docker.
+- name: Docker installation
+  hosts: all
+  vars_files:
+    - "group_vars/docker.yaml"
+  gather_facts: true
+  roles:
+    - role: docker

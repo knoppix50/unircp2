@@ -1,0 +1,7 @@
+- name: Desactivando firewalld
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: no
+    masked: no
+  become: yes

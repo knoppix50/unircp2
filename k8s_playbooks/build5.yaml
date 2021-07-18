@@ -1,0 +1,19 @@
+### -- build5.yaml -- ###
+### -- SEGUNDA PARTE -- ###
+
+# K8S init cluster, pod networks, sdn, get token and joining nodes.
+- name: K8S init cluster
+  hosts: masters
+  vars_files:
+    - "group_vars/cluster_parameters.yaml"
+  roles:
+    - { role: k8s_init_cluster/init_kubecluster }
+    - { role: k8s_init_cluster/sdn_install }
+    - { role: k8s_init_cluster/get_token }
+
+- name: K8S init cluster
+  hosts: workers
+  vars_files:
+    - "group_vars/cluster_parameters.yaml"
+  roles:
+    - { role: k8s_init_cluster/join_to_cluster }

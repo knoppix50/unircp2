@@ -1,0 +1,9 @@
+### -- build7.yaml -- ###
+# K8S Create user account admin for Kubernetes.
+- name: Create and setup kube admin user.
+  hosts: masters
+  vars_files: 
+    - "group_vars/list_users.yaml"
+  roles:
+    - { role: kubeadmin_user/create_user }
+    - { role: kubeadmin_user/config_user }

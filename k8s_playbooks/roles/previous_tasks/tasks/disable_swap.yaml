@@ -1,0 +1,13 @@
+# Desactiva el swap y elimina la entrada en el fstab.
+---
+- name: Disable SWAP 
+  shell: |
+    swapoff -a
+  become: yes
+
+- name: Disable SWAP in fstab 
+  lineinfile:
+     path: /etc/fstab
+     regexp: 'swap'
+     state: absent
+  become: yes

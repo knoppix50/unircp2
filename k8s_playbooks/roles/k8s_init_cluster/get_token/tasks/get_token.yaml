@@ -1,0 +1,14 @@
+# genera el token.
+- name: get join command
+  shell: kubeadm token create --print-join-command # genera el token.
+  register: join_command_raw # lo registra en esta lista.
+
+# De la lista join_command_raw extrae el token y lo guarda'set_fact' (leer doc Ansible)
+- name: set join command
+  set_fact:
+    join_command: "{{ join_command_raw.stdout_lines[0] }}"
+
+# la set_fact es una variable en tiempo de ejecución del playbook.
+# y estará disponible su acceso mientras dure la ejecución del playbook
+# pudiendo ser llamado desde otras partes del código, tal como se ve en
+# el role joinning_to_cluster/tasks/joining_nodes.yaml

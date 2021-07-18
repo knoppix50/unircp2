@@ -1,0 +1,9 @@
+---
+- name: enabling masquerade
+  firewalld:
+     permanent: yes
+     immediate: yes
+     masquerade: yes
+     state: enabled
+  become: yes
+

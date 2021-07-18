@@ -1,0 +1,13 @@
+- name: "Ansible Create directory if not exists"
+  file:
+    path: /home/kubeadmin/.kube
+    state: directory
+    mode: 0755
+    group: kubeadmin
+    owner: kubeadmin
+
+- name: copy admin.conf to user's kube config
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /home/kubeadmin/.kube/config
+    remote_src: yes

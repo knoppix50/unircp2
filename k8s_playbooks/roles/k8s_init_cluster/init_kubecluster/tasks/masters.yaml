@@ -1,0 +1,19 @@
+- name: kubeadm config
+  shell: kubeadm config images pull
+  
+- name: initialize K8S cluster
+  shell: kubeadm init --pod-network-cidr={{ networks.pod_network.net_addr }}/16 --apiserver-advertise-address={{ nodes.master.ip_addr }}
+  #shell: kubeadm init --pod-network-cidr=172.20.0.0/16 --apiserver-advertise-address=172.16.252.20
+
+- name: create .kube directory
+  file:
+    path: $HOME/.kube
+    state: directory
+    mode: 0755
+
+- name: copy admin.conf to user's kube config
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /root/.kube/config
+    remote_src: yes
+

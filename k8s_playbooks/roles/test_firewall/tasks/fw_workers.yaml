@@ -1,0 +1,11 @@
+---
+  - name: Firewalld rules workers
+    firewalld:
+      permanent: yes
+      immediate: yes
+      port: "{{item.port}}/{{item.proto}}"
+      state: "{{ item.state }}"
+    with_items:
+     - {port: "10250", proto: "tcp", state: "enabled", zone: "public" }
+     - {port: "30000-32767", proto: "tcp", state: "enabled", zone: "public" }
+    become: yes

@@ -1,0 +1,6 @@
+---
+# tasks file for roles/previous_tasks
+- include_tasks: update_systems.yaml
+- include_tasks: pkg_install.yaml
+- include_tasks: disable_selinux.yaml
+- include_tasks: disable_swap.yaml

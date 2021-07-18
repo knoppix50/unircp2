@@ -1,0 +1,17 @@
+### -- build66.yaml -- ###
+# k8S deploy ingress controller (HAPROXY)
+- name: Install ingress controller
+  hosts: masters
+  roles:
+    - { role: ingress_ctrl/install }
+
+- name: Post-install ingress controller
+  hosts: cluster
+  roles:
+    - { role: ingress_ctrl/post_install }
+
+# Restart firewalld
+- name: reload service firewalld
+  hosts: cluster
+  roles:
+    - role: firewall_restart

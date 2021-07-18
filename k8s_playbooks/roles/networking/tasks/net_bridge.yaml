@@ -1,0 +1,25 @@
+### Desactivamos esto
+# - name: ensure net.bridge.bridge-nf-call-ip6tables is set to 1
+#   sysctl:
+#     name: net.bridge.bridge-nf-call-ip6tables
+#     value: '1'
+#     state: present
+#   become: yes
+
+# - name: ensure net.bridge.bridge-nf-call-iptables is set to 1
+#   sysctl:
+#     name: net.bridge.bridge-nf-call-iptables
+#     value: '1'
+#     state: present
+#   become: yes
+### -------------------------
+
+- name: create & copy text
+  template:
+    src: rules.j2
+    dest: /etc/sysctl.d/k8s.conf
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+    

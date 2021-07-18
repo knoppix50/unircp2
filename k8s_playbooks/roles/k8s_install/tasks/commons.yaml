@@ -1,0 +1,30 @@
+---
+  - name: K8S repo set
+    yum_repository:
+      name: Kubernetes
+      description: Kubernetes YUM repository
+      baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+      gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+      gpgcheck: yes
+    become: yes
+
+  - name: install kubelet
+    yum:
+        name: kubelet
+        state: present
+        update_cache: true
+    become: yes
+
+  - name: install kubeadm
+    yum:
+        name: kubeadm
+        state: present
+    become: yes
+
+  - name: start kubelet
+    service:
+       name: kubelet
+       enabled: yes
+       state: started
+    become: yes
+

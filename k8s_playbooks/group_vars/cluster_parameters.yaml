@@ -1,0 +1,48 @@
+nodes:
+  master:
+    hostname: 'slave0.devops.lab'
+    ip_addr: '192.168.100.20'
+  worker1:
+    hostname: 'slave1.devops.lab'
+    ip_addr: '192.168.100.21'
+  worker2:
+    hostname: 'slave2.devops.lab'
+    ip_addr: '192.168.100.22'
+  nfs:
+    hostname: 'slave3.devops.lab'
+    ip_addr: '192.168.100.23'
+
+networks:
+  docker_network:
+    net_addr: '172.17.0.0'
+  pod_network:
+    net_addr: '10.244.0.0'
+
+master_firewalld_port_rules:
+  - { port: "6443", proto: "tcp", state: "enabled" }
+  - { port: "2379-2380", proto: "tcp", state: "enabled" }
+  - { port: "10250", proto: "tcp", state: "enabled" }
+  - { port: "10251", proto: "tcp", state: "enabled" }
+  - { port: "10252", proto: "tcp", state: "enabled" }
+  - { port: "10255", proto: "tcp", state: "enabled" }
+  - { port: "8285", proto: "udp", state: "enabled" }
+  - { port: "8472", proto: "udp", state: "enabled" } 
+  # - { port: "30000-32767", proto: "tcp", state: "enabled" }
+master_firewalld_rich_rules:
+  - 'rule family=ipv4 source address={{ nodes.worker1.ip_addr }}/32 accept'
+  - 'rule family=ipv4 source address={{ nodes.worker2.ip_addr }}/32 accept'
+ # - 'rule family=ipv4 source address={{ networks.docker_network.net_addr }}/16 accept'
+ # Nota: ya existe una zona docker en el firewalld. En principio no haría falta esta entreda.
+  
+
+worker_firewalld_port_rules:
+  - { port: "10250", proto: "tcp", state: "enabled" }
+  - { port: "2379-2380", proto: "tcp", state: "enabled" }
+  - { port: "30000-32767", proto: "tcp", state: "enabled" }
+  - { port: "8285", proto: "udp", state: "enabled" }
+  - { port: "8472", proto: "udp", state: "enabled" } 
+
+worker_firewalld_rich_rules:
+  #- 'rule family=ipv4 source address={{ nodes.master.ip_addr }}/32 accept'
+  #- 'rule family=ipv4 source address={{ networks.docker_network.net_addr }}/16 accept'
+  

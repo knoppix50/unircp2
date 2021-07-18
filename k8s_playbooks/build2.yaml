@@ -1,0 +1,31 @@
+### -- build2.yaml -- ###
+# # Firewall
+# - name: disable firewalld
+#   hosts: cluster
+#   roles:
+#     - role: firewall_off
+  
+# Firewall
+- name: set rules fw on masters
+  hosts: masters
+  vars_files:
+    - "group_vars/cluster_parameters.yaml"
+  gather_facts: true
+  roles:
+    - role: firewall
+      action: fw_masters
+
+- name: set rules fw on workers
+  hosts: workers
+  vars_files:
+    - "group_vars/cluster_parameters.yaml"
+  gather_facts: true
+  roles:
+    - role: firewall
+      action: fw_workers
+
+# Restart firewalld
+- name: reload service firewalld
+  hosts: cluster
+  roles:
+    - role: firewall_restart

@@ -1,0 +1,28 @@
+### -- build1.yaml -- ###
+# Instalación y config del NFS para el cluster K8S.
+- name: NFS install packages
+  hosts: all
+  gather_facts: false
+  roles:
+    - role: nfs_ansible
+      action: install_pkg
+
+- name: NFS server setup
+  hosts: nfs
+  gather_facts: false
+  roles:
+    - role: nfs_ansible
+      action: nfs-server
+
+- name: NFS firewall rules
+  hosts: nfs
+  gather_facts: true
+  roles:
+    - role: nfs_ansible
+      action: nfs_firewall
+
+# Restart firewalld
+- name: reload service firewalld
+  hosts: nfs
+  roles:
+    - role: firewall_restart

@@ -1,0 +1,7 @@
+# Actualiza los sistemas.
+---
+- name: DNF update the system
+  dnf:
+    name: "*"
+    state: latest
+  become: yes

@@ -1,0 +1,7 @@
+---
+- name: Install chrony git
+  dnf:
+    name: ['chrony']
+    state: present
+    update_cache: True
+  become: yes

@@ -1,0 +1,9 @@
+# Instala los paquetes necesarios para la preparación del enviroment del cluster.
+---
+- name: Instalacion de paquetes
+  dnf:
+     name: ['chrony', 'nfs-utils', 'net-tools', 'nfs4-acl-tools', 'git', 'wget']
+     state: present
+     update_cache: True
+  become: yes
+

@@ -1,0 +1,12 @@
+- name: Obtenemos el nombre del host en el ingress
+  shell: kubectl get ingress --namespace=minigame | grep game | awk '{print$3}'
+  register: host_game
+
+- name: Obtenemos el puerto de mapeo del puerto 80  en el ingress-controller
+  shell: kubectl get svc --namespace=haproxy-controller | grep haproxy-ingress | awk '{print$5}' | cut -c 4-8
+  register: num_port
+        
+  
+- name: debug
+  debug: 
+    msg="Accede al juego en tu browser mediante http://{{ host_game.stdout }}:{{ num_port.stdout }}"

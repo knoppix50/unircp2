@@ -1,0 +1,22 @@
+### -- build4.yaml -- ###
+# K8S cluster install package 
+- name: K8S cluster install package
+  hosts: cluster
+  gather_facts: true
+  roles:
+    - role: k8s_install
+      action: commons
+
+# K8S master install package 
+- name: K8S cluster install package
+  hosts: masters
+  gather_facts: true
+  roles:
+    - role: k8s_install
+      action: kubectl_masters
+
+# Reboot VMs (second reboot)
+- name: Reboot VMs
+  hosts: cluster
+  roles:
+    - role: reboot_vm

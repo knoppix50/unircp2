@@ -1,0 +1,5 @@
+- name: Deploy K8S mini app
+  hosts: masters
+  roles:
+    - role: k8s_deploy_game_app
+

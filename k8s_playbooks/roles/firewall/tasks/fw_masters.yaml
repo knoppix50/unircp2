@@ -1,0 +1,21 @@
+- name: FirewallD rules
+  firewalld:
+     permanent: yes
+     immediate: yes
+     port: "{{item.port}}/{{item.proto}}"
+     state: "{{item.state}}"
+  with_items:
+     - "{{ master_firewalld_port_rules }}"
+  become: yes
+    
+- name: enabling rich rules master
+  firewalld:
+     permanent: yes
+     immediate: yes
+     rich_rule: "{{ item }}"
+     state: enabled
+  with_items:
+     - "{{ master_firewalld_rich_rules }}"
+  become: yes
+
+
