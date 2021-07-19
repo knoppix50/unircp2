@@ -37,7 +37,7 @@ resource "azurerm_network_interface" "myNic1" {
     subnet_id                      = azurerm_subnet.mySubnet.id 
     private_ip_address_allocation  = "Static"
     private_ip_address             = "192.168.100.${count.index + 20}"
-    public_ip_address_id           = azurerm_public_ip.myPublicIp1[count.index].id # Genera problemas con la inyección por variables
+    public_ip_address_id           = azurerm_public_ip.myPublicIp1[count.index].id
   }
 
     tags = {
