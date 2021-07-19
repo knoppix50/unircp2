@@ -37,7 +37,7 @@ resource "azurerm_network_interface" "myNic1" {
     subnet_id                      = azurerm_subnet.mySubnet.id 
     private_ip_address_allocation  = "Static"
     private_ip_address             = "192.168.100.${count.index + 20}"
-    # public_ip_address_id           = azurerm_public_ip.myPublicIp1[count.index].name # Genera problemas con la inyección por variables
+    public_ip_address_id           = azurerm_public_ip.myPublicIp1[count.index].id # Genera problemas con la inyección por variables
   }
 
     tags = {
@@ -49,16 +49,16 @@ resource "azurerm_network_interface" "myNic1" {
 # IP pública
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/public_ip
 
-# resource "azurerm_public_ip" "myPublicIp1" {
-#  name                = "vmip-${var.vms[count.index]}"
-#  count               = length(var.vms)
-#  location            = azurerm_resource_group.rg.location
-#  resource_group_name = azurerm_resource_group.rg.name
-#  allocation_method   = "Dynamic"
-#  sku                 = "Basic"
-#
-#    tags = {
-#        environment = "CP2"
-#    }
+resource "azurerm_public_ip" "myPublicIp1" {
+  count               = length(var.vms)
+  name                = "vmip-${count.index}"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  allocation_method   = "Dynamic"
+  sku                 = "Basic"
 
-#}
+    tags = {
+        environment = "CP2"
+    }
+
+}

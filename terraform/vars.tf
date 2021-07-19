@@ -32,5 +32,5 @@ variable "ssh_user" {
 variable "vms" {
   description = "vms a crear"
   type = list(string)
-  default = ["slave0", "slave1", "slave2", "slave3"]
+  default = ["slave0", "slave1"]
 }
